@@ -1,0 +1,12 @@
+{
+  "name": "inventory",
+  "private": true,
+  "description": "Crowders Camps supply inventory tool. No build step; this file only installs the test browser.",
+  "scripts": {
+    "test": "node tests/run.js",
+    "shots": "node tests/run.js --shots"
+  },
+  "devDependencies": {
+    "playwright": "1.47.2"
+  }
+}

@@ -1,0 +1,15 @@
+// Cloudflare deploys the save relay from this repo using these settings.
+// GITHUB_TOKEN is NOT here: add it in the Cloudflare dashboard as a Secret.
+// Repo: Crowders-Camps/inventory.
+{
+  "name": "inventory",
+  "main": "worker/worker.js",
+  "compatibility_date": "2026-09-01",
+  "workers_dev": true,
+  "vars": {
+    "REPO": "Crowders-Camps/inventory",
+    "BRANCH": "live-data",
+    "DATA_PATH": "data/live.json",
+    "ALLOWED_ORIGIN": "https://crowders-camps.github.io"
+  }
+}

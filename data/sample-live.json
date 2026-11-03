@@ -1,0 +1,43 @@
+{
+  "v": 3,
+  "at": "2026-11-03T15:20:00.000Z",
+  "by": "JM",
+  "state": {
+    "cats": [
+      { "id": "c_clean", "name": "Cleaning" },
+      { "id": "c_office", "name": "Office" },
+      { "id": "c_prog", "name": "Program supplies" },
+      { "id": "c_maint", "name": "Maintenance" }
+    ],
+    "items": [
+      { "id": "i_bags", "name": "Trash bags 55 gal", "cat": "c_clean", "retired": false },
+      { "id": "i_bleach", "name": "Bleach 1 gal", "cat": "c_clean", "retired": false },
+      { "id": "i_towels", "name": "Paper towels (case)", "cat": "c_clean", "retired": false },
+      { "id": "i_paper", "name": "Copy paper (ream)", "cat": "c_office", "retired": false },
+      { "id": "i_toner", "name": "Printer toner", "cat": "c_office", "retired": false },
+      { "id": "i_markers", "name": "Markers (box)", "cat": "c_prog", "retired": false },
+      { "id": "i_balls", "name": "Kickballs", "cat": "c_prog", "retired": false },
+      { "id": "i_bulbs", "name": "LED bulbs", "cat": "c_maint", "retired": false },
+      { "id": "i_old", "name": "Old flyers", "cat": "c_office", "retired": true }
+    ],
+    "inv": {
+      "c": {
+        "RIDGE": {
+          "locs": [
+            { "id": "l_main", "name": "Main storage", "items": ["i_bags", "i_bleach", "i_towels"] },
+            { "id": "l_office", "name": "Office closet", "items": ["i_paper", "i_toner"] }
+          ],
+          "stock": { "i_bags": 4, "i_bleach": 0, "i_towels": 2, "i_paper": 10 }
+        },
+        "SPRINGS": {
+          "locs": [{ "id": "l_shed", "name": "Program shed", "items": ["i_markers", "i_balls"] }],
+          "stock": { "i_markers": 6 }
+        }
+      },
+      "log": [
+        { "at": "2026-11-02T14:00:00.000Z", "by": "JM", "c": "RIDGE", "n": 4, "of": 8, "ch": 4 },
+        { "at": "2026-11-03T15:20:00.000Z", "by": "AK", "c": "SPRINGS", "n": 1, "of": 8, "ch": 1 }
+      ]
+    }
+  }
+}

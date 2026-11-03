@@ -1,0 +1,888 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Supply Inventory · Crowders Camps</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&display=swap">
+<style>
+/* Crowders Camps Design System tokens (colour, type, radius, shadow), light + dark.
+   Brand face is Aftika Soft. It is used when installed on the device (local()); the font files are
+   not in this public repo until the licence is confirmed for web use. Nunito is the rounded web fallback. */
+@font-face{font-family:"Aftika Soft";font-weight:400;src:local("Aftika Soft Regular"),local("AftikaSoft-Regular")}
+@font-face{font-family:"Aftika Soft";font-weight:600;src:local("Aftika Soft SemiBold"),local("AftikaSoft-SemiBold")}
+@font-face{font-family:"Aftika Soft";font-weight:700;src:local("Aftika Soft Bold"),local("AftikaSoft-Bold")}
+@font-face{font-family:"Aftika Soft";font-weight:900;src:local("Aftika Soft Black"),local("AftikaSoft-Black")}
+:root{
+  --bg:#fbf9f0; --panel:#ffffff; --head:#fbf9f0; --sunken:#e9ebe9;
+  --ink:#14181a; --ink2:#3a4145; --muted:#5f686f; --line:#d7dbdc; --line2:#e9ebe9;
+  --act:#237a2c; --act-h:#1c6624; --act-ink:#ffffff;
+  --link:#0a7c91; --focus:rgba(0,183,224,.45); --focus-solid:#00b7e0;
+  --warn-line:#b99a00; --warn-soft:#fdf6bf;
+  --danger:#b23e28; --danger-soft:#fbe5df;
+  --ok-soft:#e3f4e5;
+  --ridge:#f8da02; --ridge-ink:#14181a;
+  --springs:#1470af; --springs-ink:#ffffff;
+  --sm:#33b04a; --sm-ink:#14181a;
+  --grad:linear-gradient(100deg,#f8da02 15%,#33b04a 50%,#00b7e0 85%);
+  --shadow-sm:0 1px 2px rgba(20,24,26,.08),0 1px 1px rgba(20,24,26,.04);
+  --shadow-md:0 6px 16px rgba(20,24,26,.10),0 2px 4px rgba(20,24,26,.06);
+  --r-sm:10px; --r-md:16px; --r-lg:24px; --pill:999px;
+  --f:"Aftika Soft","Nunito",ui-rounded,"Segoe UI",system-ui,sans-serif;
+  color-scheme:light;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --bg:#121618; --panel:#1b2124; --head:#171c1f; --sunken:#262d31;
+  --ink:#f3f2ea; --ink2:#d7dbdc; --muted:#a9b0b4; --line:#363e43; --line2:#2a3135;
+  --act:#33b04a; --act-h:#4cc463; --act-ink:#14181a;
+  --link:#8ce6f2; --warn-line:#f8da02; --warn-soft:#3a3410;
+  --danger:#f0927d; --danger-soft:#3d2420; --ok-soft:#1d3322;
+  --springs:#8cc0e8; --springs-ink:#14181a;
+  --shadow-sm:0 1px 2px rgba(0,0,0,.4); --shadow-md:0 6px 16px rgba(0,0,0,.45);
+  color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#121618; --panel:#1b2124; --head:#171c1f; --sunken:#262d31;
+  --ink:#f3f2ea; --ink2:#d7dbdc; --muted:#a9b0b4; --line:#363e43; --line2:#2a3135;
+  --act:#33b04a; --act-h:#4cc463; --act-ink:#14181a;
+  --link:#8ce6f2; --warn-line:#f8da02; --warn-soft:#3a3410;
+  --danger:#f0927d; --danger-soft:#3d2420; --ok-soft:#1d3322;
+  --springs:#8cc0e8; --springs-ink:#14181a;
+  --shadow-sm:0 1px 2px rgba(0,0,0,.4); --shadow-md:0 6px 16px rgba(0,0,0,.45);
+  color-scheme:dark}
+
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--f);font-size:15px;line-height:1.45;font-weight:400;
+  padding:0 max(16px,env(safe-area-inset-right,0px)) 56px max(16px,env(safe-area-inset-left,0px))}
+.stripe{height:8px;background:var(--grad);margin:0 calc(-1*max(16px,env(safe-area-inset-left,0px))) 18px}
+h1,h2,h3{margin:0;font-weight:900;text-transform:uppercase;letter-spacing:-.01em;line-height:1;text-wrap:balance}
+button,input,select,textarea{font:inherit;color:inherit}
+:focus-visible{outline:none;box-shadow:0 0 0 3px var(--focus)!important}
+[hidden]{display:none!important}
+.page{max-width:1280px;margin:0 auto}
+
+/* header */
+.top{display:flex;flex-wrap:wrap;align-items:flex-end;justify-content:space-between;gap:12px 20px;margin-bottom:16px}
+.kick{font-size:13px;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:var(--muted)}
+.top h1{font-size:clamp(30px,6vw,44px);margin-top:4px}
+.top p{margin:6px 0 0;color:var(--muted);max-width:60ch}
+.actions{display:flex;flex-wrap:wrap;align-items:center;gap:8px}
+
+/* controls */
+.btn{display:inline-flex;align-items:center;gap:6px;border:1.5px solid var(--line);background:var(--panel);padding:8px 16px;border-radius:var(--pill);cursor:pointer;font-weight:700;line-height:1.2;white-space:nowrap}
+.btn:hover{border-color:var(--ink2)}
+.btn:active{transform:scale(.97)}
+.btn.primary{background:var(--act);color:var(--act-ink);border-color:var(--act)}
+.btn.primary:hover{background:var(--act-h);border-color:var(--act-h)}
+.btn.quiet{background:transparent;border-color:transparent}
+.btn.quiet:hover{border-color:var(--line)}
+.btn.small{padding:5px 12px;font-size:13px}
+.btn.danger{color:var(--danger)}
+.btn:disabled{opacity:.45;cursor:not-allowed;transform:none}
+.btn svg{width:16px;height:16px;flex:none}
+input[type=number],input[type=text],input[type=search],select,textarea{border:1.5px solid var(--line);background:var(--panel);border-radius:var(--r-sm);padding:7px 10px;min-width:0;width:100%}
+input:focus,select:focus,textarea:focus{border-color:var(--focus-solid)}
+input[type=number]{text-align:right;font-variant-numeric:tabular-nums;font-weight:700}
+.lbl{font-size:12px;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);font-weight:800}
+.hint{font-size:13px;color:var(--muted)}
+.x{display:inline-flex;align-items:center;justify-content:center;border:none;background:none;color:var(--muted);cursor:pointer;min-width:32px;height:32px;padding:0 6px;border-radius:var(--r-sm)}
+.x svg{width:16px;height:16px}
+.x:hover{color:var(--ink);background:var(--sunken)}
+.x.del:hover{color:var(--danger);background:var(--danger-soft)}
+.x:disabled{opacity:.3;cursor:default;background:none}
+.x.armed{color:var(--danger);background:var(--danger-soft);font-size:12.5px;font-weight:800;padding:0 10px}
+.linkbtn{border:none;background:none;color:var(--link);text-decoration:underline;text-underline-offset:2px;cursor:pointer;padding:0;font-weight:700}
+
+/* tabs */
+.seg{display:inline-flex;background:var(--sunken);border-radius:var(--pill);padding:3px;gap:2px}
+.seg button{border:none;background:none;padding:6px 14px;border-radius:var(--pill);cursor:pointer;font-weight:700;font-size:14px;color:var(--ink2);white-space:nowrap}
+.seg button[aria-selected=true],.seg button[aria-checked=true]{background:var(--panel);color:var(--ink);box-shadow:var(--shadow-sm)}
+.modeseg button{padding:8px 18px;font-size:15px}
+.modeseg button[aria-selected=true]{background:var(--ink);color:var(--bg)}
+.siteseg button[data-site]::before{content:"";display:inline-block;width:10px;height:10px;border-radius:50%;margin-right:7px;vertical-align:-1px;background:var(--c)}
+.siteseg [data-site=RIDGE]{--c:var(--ridge)} .siteseg [data-site=SPRINGS]{--c:var(--springs)} .siteseg [data-site=SM]{--c:var(--sm)}
+
+/* sync bar, status, history */
+.syncbar{position:sticky;top:max(8px,env(safe-area-inset-top,0px));z-index:20;display:flex;flex-wrap:wrap;align-items:center;gap:8px 14px;padding:10px 14px;border-radius:var(--r-md);border:1.5px solid var(--line);background:var(--panel);font-size:14px;margin-bottom:8px;box-shadow:var(--shadow-sm)}
+.syncbar .dot{width:10px;height:10px;border-radius:50%;background:var(--muted);flex:none}
+.syncbar[data-state=live] .dot{background:#33b04a;box-shadow:0 0 0 4px rgba(51,176,74,.22)}
+.syncbar[data-state=dirty]{border-color:var(--warn-line);background:var(--warn-soft)} .syncbar[data-state=dirty] .dot{background:var(--warn-line)}
+.syncbar[data-state=warn]{border-color:var(--danger);background:var(--danger-soft)} .syncbar[data-state=warn] .dot{background:var(--danger)}
+.syncbar[data-state=busy] .dot{background:#f8da02}
+.synctext{flex:1 1 280px;min-width:0}
+.syncact{display:flex;flex-wrap:wrap;align-items:center;gap:8px}
+.pinf{display:flex;flex-wrap:wrap;align-items:center;gap:6px 8px;font-size:14px}
+.pinf label{font-weight:800}
+.pinf input{width:150px}
+.pinf .hint{flex-basis:100%;font-size:12.5px}
+.status{font-size:14px;color:var(--muted);min-height:1.5em;margin:0 0 10px;padding:0 4px}
+.status.err{color:var(--danger);font-weight:600}
+.status .linkbtn{margin-left:8px}
+.histpanel{background:var(--panel);border:1.5px solid var(--line);border-radius:var(--r-md);padding:14px 16px;margin-bottom:12px;box-shadow:var(--shadow-sm)}
+.hhead{display:flex;flex-wrap:wrap;align-items:center;gap:6px 14px;margin-bottom:8px}
+.hhead h2{font-size:20px}
+.hhead .x{margin-left:auto}
+.hlist{list-style:none;margin:0;padding:0;max-height:340px;overflow:auto}
+.hlist li{display:grid;grid-template-columns:56px minmax(0,1fr) auto auto;align-items:center;gap:12px;padding:8px 0;border-top:1px solid var(--line2)}
+.hv{font-weight:800;font-variant-numeric:tabular-nums}
+.hw{font-weight:700;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.ht{color:var(--muted);font-size:13px;font-variant-numeric:tabular-nums}
+.hcur{font-size:11.5px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;color:var(--act);background:var(--ok-soft);border-radius:var(--pill);padding:4px 10px}
+@media (max-width:560px){.hlist li{grid-template-columns:44px minmax(0,1fr)}.hlist li .ht{grid-column:2}.hlist li>button,.hlist li .hcur{grid-column:2;justify-self:start}}
+
+/* layout */
+.wrap{display:grid;grid-template-columns:300px minmax(0,1fr);gap:20px;align-items:start}
+@media (max-width:900px){.wrap{grid-template-columns:minmax(0,1fr)}.panel{order:2}}
+.panel{background:var(--panel);border-radius:var(--r-lg);padding:18px;display:flex;flex-direction:column;gap:16px;box-shadow:var(--shadow-md)}
+@media (min-width:901px){.panel{position:sticky;top:12px}}
+.panel h2{font-size:20px}
+.grp{display:flex;flex-direction:column;gap:8px}
+main{min-width:0}
+.card{background:var(--panel);border-radius:var(--r-lg);overflow:hidden;box-shadow:var(--shadow-md)}
+.thead{display:flex;flex-wrap:wrap;align-items:center;gap:8px 16px;padding:14px 18px;background:var(--head);border-bottom:1px solid var(--line2)}
+.thead h3{font-size:22px}
+.thead .btn{margin-left:auto}
+.meta{color:var(--muted);font-size:14px}
+.empty{padding:16px 18px;color:var(--muted)}
+
+/* inventory toolbar */
+.invbar{display:flex;flex-wrap:wrap;align-items:center;gap:10px 14px;margin-bottom:12px}
+.invbar .find{flex:1 1 200px;max-width:300px}
+.invbar select{width:auto;max-width:220px;flex:0 1 auto}
+.locbar{background:var(--panel);border-radius:var(--r-md);padding:12px 14px;margin-bottom:14px;display:flex;flex-direction:column;gap:10px;box-shadow:var(--shadow-sm)}
+.lochead{display:flex;flex-wrap:wrap;align-items:center;gap:6px 12px}
+.lochead .btn{margin-left:auto}
+.lchips{display:flex;flex-wrap:wrap;gap:6px}
+.lchip{border:1.5px solid var(--line);background:var(--panel);border-radius:var(--pill);padding:6px 12px;cursor:pointer;font-weight:700;font-size:14px;display:inline-flex;align-items:baseline;gap:7px}
+.lchip small{font-size:12px;color:var(--muted);font-weight:700;font-variant-numeric:tabular-nums}
+.lchip:hover{border-color:var(--ink2)}
+.lchip[aria-pressed=true]{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+.lchip[aria-pressed=true] small{color:inherit;opacity:.75}
+.lchip.un{border-style:dashed}
+.locedit{border-top:1px solid var(--line2);padding-top:10px;display:flex;flex-direction:column;gap:6px}
+.lerow{display:flex;align-items:center;gap:4px}
+.lerow input[type=text]{max-width:300px;font-weight:700}
+.lerow .n{font-size:13px;color:var(--muted);min-width:64px;padding-left:6px}
+.leadd{display:flex;flex-wrap:wrap;gap:6px 8px;align-items:center;padding-top:4px}
+.leadd input{max-width:300px;flex:1 1 200px}
+.leadd .hint{flex-basis:100%}
+
+/* location sections */
+.invsecs{display:flex;flex-direction:column;gap:16px}
+.invloc.un{box-shadow:none;border:2px dashed var(--line)}
+.invloc.un .thead{background:transparent}
+.invtable{border-collapse:collapse;width:100%}
+.invtable th{font-size:12px;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);text-align:left;padding:8px 10px;font-weight:800;border-bottom:1px solid var(--line2)}
+.invtable td{padding:6px 10px;border-bottom:1px solid var(--line2);vertical-align:middle}
+.invtable tr:last-child td{border-bottom:none}
+.invtable td.item{font-weight:700;font-size:15.5px}
+.invtable td.item small{display:block;font-weight:400;color:var(--muted);font-size:12.5px;margin-top:1px}
+.invtable th.oh,.invtable td.oh{width:132px}
+.invtable td.oh input{width:110px;font-size:17px;padding:7px 10px}
+.invtable td.oh.chg input{background:var(--warn-soft);border-color:var(--warn-line)}
+.invtable th.mv,.invtable td.mv{width:190px}
+.invtable td.mv select{font-size:13px;padding:5px 8px;background:transparent;border-color:transparent;color:var(--muted)}
+.invtable td.mv select:hover,.invtable td.mv select:focus{border-color:var(--line);background:var(--panel);color:var(--ink)}
+@media (max-width:560px){.invtable th.mv,.invtable td.mv{width:112px}.invtable th.oh,.invtable td.oh{width:92px}.invtable td.oh input{width:80px}.invtable td,.invtable th{padding-left:8px;padding-right:6px}}
+.addrow{display:flex;flex-wrap:wrap;gap:8px;padding:12px 18px;align-items:center;border-top:1px solid var(--line2)}
+.addrow input{flex:1 1 200px;max-width:420px}
+
+/* side panel: inventory */
+.sitename{font-size:30px;font-weight:900;text-transform:uppercase;letter-spacing:-.01em;line-height:1;display:flex;align-items:center;gap:10px}
+.sitename::before{content:"";width:14px;height:14px;border-radius:50%;background:var(--c);flex:none}
+.sitename.RIDGE{--c:var(--ridge)} .sitename.SPRINGS{--c:var(--springs)} .sitename.SM{--c:var(--sm)}
+.lastinv{background:var(--act);color:var(--act-ink);border-radius:var(--r-md);padding:12px 14px;display:flex;flex-direction:column;gap:2px}
+.lastinv .lbl{color:inherit;opacity:.85}
+.lastinv b{font-size:19px;font-weight:900;font-variant-numeric:tabular-nums}
+.lastinv span{font-size:14px}
+.lastinv.none{background:var(--sunken);color:var(--muted)}
+.othersites{font-size:13.5px;color:var(--muted);display:flex;flex-direction:column;gap:2px}
+.othersites b{color:var(--ink);font-weight:700}
+.totals{display:grid;grid-template-columns:repeat(2,1fr);gap:8px}
+.tot{background:var(--sunken);border-radius:var(--r-sm);padding:10px;text-align:center}
+.tot b{display:block;font-size:24px;font-weight:900;font-variant-numeric:tabular-nums;line-height:1.1}
+.tot span{font-size:11.5px;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);font-weight:700}
+.tot.hot{background:var(--warn-soft);box-shadow:inset 0 0 0 1.5px var(--warn-line)}
+.howto{font-size:13.5px;color:var(--ink2);background:var(--head);border-radius:var(--r-sm);padding:12px;line-height:1.5}
+.invlog{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;max-height:360px;overflow:auto}
+.invlog li{display:flex;flex-direction:column;padding:7px 0;border-top:1px solid var(--line2);font-size:14px}
+.invlog li:first-child{border-top:none}
+.invlog .t{font-size:12.5px;font-variant-numeric:tabular-nums;color:var(--muted)}
+.invlog .w{font-weight:800}
+.invlog .d{color:var(--muted);font-size:13px}
+
+/* index */
+.newitem{padding:16px 18px;border-bottom:1px solid var(--line2);display:flex;flex-direction:column;gap:10px}
+.nf{display:grid;grid-template-columns:minmax(0,2fr) minmax(0,1fr) auto;gap:10px;align-items:end}
+.nf label{display:flex;flex-direction:column;gap:4px;min-width:0}
+@media (max-width:560px){.nf{grid-template-columns:minmax(0,1fr)}.nf .btn{justify-self:start}}
+.nmsg{font-size:14px;color:var(--act);font-weight:600;min-height:1.4em} .nmsg.err{color:var(--danger)}
+.import{border-bottom:1px solid var(--line2)}
+.import summary{padding:12px 18px;cursor:pointer;font-weight:800;list-style-position:inside}
+.import summary:hover{color:var(--link)}
+.impbody{padding:0 18px 16px;display:flex;flex-direction:column;gap:10px}
+.impbody textarea{min-height:120px;resize:vertical;line-height:1.4}
+.improw{display:flex;flex-wrap:wrap;align-items:center;gap:8px 12px}
+.improw select{width:auto}
+.idxbar{display:flex;flex-wrap:wrap;gap:8px 10px;align-items:center;padding:12px 18px;border-bottom:1px solid var(--line2)}
+.idxbar input{flex:1 1 200px;max-width:300px}
+.idxbar select{width:auto}
+.ilist{list-style:none;margin:0;padding:0}
+.irow{display:grid;grid-template-columns:minmax(0,1fr) minmax(130px,200px) auto 36px;gap:8px;align-items:center;padding:6px 14px 6px 12px;border-bottom:1px solid var(--line2)}
+.irow:last-child{border-bottom:none}
+.irow input[type=text],.irow select{background:transparent;border-color:transparent;padding:6px 8px}
+.irow input[type=text]{font-weight:700;font-size:15px}
+.irow select{color:var(--ink2);font-size:14px}
+.irow input[type=text]:hover,.irow select:hover{border-color:var(--line)}
+.irow input:focus,.irow select:focus{background:var(--panel);border-color:var(--focus-solid)}
+.irow.retired input[type=text]{color:var(--muted);text-decoration:line-through}
+.irow.saved{background:var(--ok-soft)}
+.ret{display:inline-flex;align-items:center;gap:6px;font-size:13px;font-weight:700;color:var(--muted);cursor:pointer;border:1.5px solid var(--line);border-radius:var(--pill);padding:4px 10px;white-space:nowrap}
+.ret input{accent-color:var(--ink2);margin:0}
+.irow.retired .ret{background:var(--sunken);color:var(--ink)}
+@media (max-width:560px){.irow{grid-template-columns:minmax(0,1fr) auto;row-gap:2px}.irow .icat{grid-column:1;grid-row:2}.irow .ret{grid-column:2;grid-row:2;justify-self:end;padding:4px 8px}.irow .x{grid-column:2;grid-row:1;justify-self:end}}
+
+/* side panel: categories */
+.catlist{display:flex;flex-direction:column;gap:2px}
+.crow{display:flex;align-items:center;gap:2px}
+.crow input{flex:1 1 auto;font-weight:700;padding:6px 8px;background:transparent;border-color:transparent}
+.crow input:hover{border-color:var(--line)}
+.crow input:focus{background:var(--panel);border-color:var(--focus-solid)}
+.crow .n{font-size:12.5px;color:var(--muted);min-width:26px;text-align:right;font-variant-numeric:tabular-nums;padding-right:4px}
+.cadd{display:flex;gap:6px}
+
+@media (prefers-reduced-motion:no-preference){.btn,.lchip,.seg button{transition:background .15s,border-color .15s,color .15s,transform .12s cubic-bezier(.34,1.56,.64,1)}.irow{transition:background .4s}}
+</style>
+</head>
+<body>
+<div class="stripe" aria-hidden="true"></div>
+<div class="page">
+<header class="top">
+  <div>
+    <div class="kick">Crowders Camps</div>
+    <h1>Supply Inventory</h1>
+    <p id="topText">Count what’s on hand at each camp, sorted by storage location.</p>
+  </div>
+  <div class="actions">
+    <div class="seg modeseg" role="tablist" aria-label="Section" id="modeSeg">
+      <button type="button" role="tab" data-tab="inv">Inventory</button><button type="button" role="tab" data-tab="index">Index</button>
+    </div>
+    <button class="btn small quiet" type="button" id="copyLink" title="Copy a link to this view">
+      <svg viewBox="0 0 256 256" aria-hidden="true"><path fill="currentColor" d="M240 88.23a54.43 54.43 0 0 1-16 37L189.25 160a54.27 54.27 0 0 1-38.63 16h-.05A54.63 54.63 0 0 1 96 119.84a8 8 0 0 1 16 .45A38.62 38.62 0 0 0 150.58 160a38.39 38.39 0 0 0 27.31-11.31l34.75-34.75a38.63 38.63 0 0 0-54.63-54.63l-11 11A8 8 0 0 1 135.7 59l11-11a54.65 54.65 0 0 1 77.3 0 54.86 54.86 0 0 1 16 40.23Zm-131 97.43-11 11A38.4 38.4 0 0 1 70.6 208a38.63 38.63 0 0 1-27.29-65.94L78 107.31a38.63 38.63 0 0 1 66 28.4 8 8 0 0 0 16 .45A54.86 54.86 0 0 0 144 96a54.65 54.65 0 0 0-77.27 0L32 130.75A54.62 54.62 0 0 0 70.56 224a54.28 54.28 0 0 0 38.64-16l11-11a8 8 0 0 0-11.2-11.34Z"/></svg>Copy link</button>
+  </div>
+</header>
+
+<div class="syncbar" id="syncbar" data-state="loading" role="region" aria-label="Live version">
+  <span class="dot" aria-hidden="true"></span>
+  <span class="synctext" id="syncText">Loading the live version…</span>
+  <span class="syncact" id="syncAct"></span>
+</div>
+<section class="histpanel" id="histPanel" hidden aria-label="Version history"></section>
+<div class="status" id="status" role="status" aria-live="polite"></div>
+
+<div class="wrap">
+  <aside class="panel" id="panel" aria-label="Summary"></aside>
+  <main id="view"></main>
+</div>
+</div>
+<datalist id="invList"></datalist>
+
+<script>
+(function(){
+"use strict";
+/* ===================== settings ===================== */
+const SITES = ['RIDGE','SPRINGS','SM'];
+const SITE_NAME = {RIDGE:'Ridge', SPRINGS:'Springs', SM:'South Mountain'};
+const SITE_SHORT = {RIDGE:'Ridge', SPRINGS:'Springs', SM:'South Mtn'};
+const SITE_TOK = {RIDGE:'ridge', SPRINGS:'springs', SM:'sm'};
+/* storage locations a site starts with before anyone edits it */
+const STARTER_LOCS = [['l_main','Main storage']];
+/* categories the index starts with before the first push */
+const STARTER_CATS = [['c_clean','Cleaning'],['c_office','Office'],['c_prog','Program supplies'],['c_maint','Maintenance'],['c_first','First aid']];
+const KEY = 'inventoryTool.v1', SYNCKEY = 'inventoryTool.sync', PREFKEY = 'inventoryTool.prefs';
+const SHARED = ['cats','items','inv'];
+const OPTIONAL = ['inv'];             /* absent until someone first edits it */
+const LOG_MAX = 400;
+const POLL_MS = 15000;
+/* The save relay (worker/worker.js). Replace with the Worker address, e.g. https://inventory.<account>.workers.dev */
+const REMOTE_URL = '__RELAY_URL__';
+
+const ICON = {
+  up:'<svg viewBox="0 0 256 256" aria-hidden="true"><path fill="currentColor" d="M213.66 165.66a8 8 0 0 1-11.32 0L128 91.31l-74.34 74.35a8 8 0 0 1-11.32-11.32l80-80a8 8 0 0 1 11.32 0l80 80a8 8 0 0 1 0 11.32Z"/></svg>',
+  down:'<svg viewBox="0 0 256 256" aria-hidden="true"><path fill="currentColor" d="m213.66 101.66-80 80a8 8 0 0 1-11.32 0l-80-80a8 8 0 0 1 11.32-11.32L128 164.69l74.34-74.35a8 8 0 0 1 11.32 11.32Z"/></svg>',
+  x:'<svg viewBox="0 0 256 256" aria-hidden="true"><path fill="currentColor" d="M205.66 194.34a8 8 0 0 1-11.32 11.32L128 139.31l-66.34 66.35a8 8 0 0 1-11.32-11.32L116.69 128 50.34 61.66a8 8 0 0 1 11.32-11.32L128 116.69l66.34-66.35a8 8 0 0 1 11.32 11.32L139.31 128Z"/></svg>'
+};
+
+/* ===================== state ===================== */
+function defaults(){ return {cats:STARTER_CATS.map(([id,name])=>({id,name})), items:[]}; }
+let S;
+try{ const raw=localStorage.getItem(KEY); S=raw?Object.assign(defaults(),JSON.parse(raw)):defaults(); }catch(e){ S=defaults(); }
+function stable(v){ return JSON.stringify(v===undefined?null:v,(k,val)=>val&&typeof val==='object'&&!Array.isArray(val)?Object.keys(val).sort().reduce((a,x)=>(a[x]=val[x],a),{}):val); }
+function sharedOf(s){ const o={}; SHARED.forEach(k=>{ if(s[k]!==undefined) o[k]=s[k]; }); return o; }
+function sharedJSON(){ return stable(sharedOf(S)); }
+const PRISTINE = stable(sharedOf(defaults()));
+let SY={baseV:0, baseJSON:PRISTINE};
+try{ const r=localStorage.getItem(SYNCKEY); if(r) SY=Object.assign(SY,JSON.parse(r)); }catch(e){}
+let PREF={tab:'inv', site:'RIDGE', loc:'all', cat:'all', by:''};
+try{ const r=localStorage.getItem(PREFKEY); if(r) PREF=Object.assign(PREF,JSON.parse(r)); }catch(e){}
+if(!SITES.includes(PREF.site)) PREF.site=SITES[0];
+function savePref(){ try{ localStorage.setItem(PREFKEY,JSON.stringify(PREF)); }catch(e){} }
+function isDirty(){ return sharedJSON()!==SY.baseJSON; }
+let liveErr=false, STORE=null, LIVE=null, liveChecked=false, pushing=false, conflict=null;
+function save(){
+  try{ localStorage.setItem(KEY,JSON.stringify(sharedOf(S))); localStorage.setItem(SYNCKEY,JSON.stringify(SY)); }catch(e){}
+  renderSync();
+}
+
+/* ===================== lookups ===================== */
+let ITEM=new Map(), CAT=new Map();
+function reindex(){ S.cats=S.cats||[]; S.items=S.items||[]; ITEM=new Map(S.items.map(i=>[i.id,i])); CAT=new Map(S.cats.map(c=>[c.id,c])); }
+function esc(s){ return String(s==null?'':s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }
+function normName(s){ return String(s||'').replace(/\s+/g,' ').trim(); }
+function nameKey(s){ return normName(s).toLowerCase(); }
+function findByName(n,exceptId){ const k=nameKey(n); return S.items.find(i=>i.id!==exceptId&&nameKey(i.name)===k)||null; }
+function newId(p){ return p+Date.now().toString(36)+Math.random().toString(36).slice(2,6); }
+function catKey(it){ return it&&it.cat&&CAT.has(it.cat)?it.cat:'_none'; }
+function catName(it){ const k=catKey(it); return k==='_none'?'Uncategorized':CAT.get(k).name; }
+const byName=(a,b)=>a.name.localeCompare(b.name,undefined,{sensitivity:'base'});
+function itemName(id){ const it=ITEM.get(id); return it?it.name:''; }
+function fmtWhen(iso){ if(!iso) return ''; const d=new Date(iso); if(isNaN(d)) return ''; return d.toLocaleDateString(undefined,{month:'short',day:'numeric'})+' at '+d.toLocaleTimeString(undefined,{hour:'numeric',minute:'2-digit'}); }
+function plural(n,w){ return n+' '+w+(n===1?'':'s'); }
+
+/* ===================== inventory data =====================
+   S.inv = { c: { RIDGE|SPRINGS|SM: { locs:[{id,name,items:[itemId]}], stock:{itemId:number} } },
+             log: [{at, by, c, n (items counted), of (items listed), ch (counts changed)}] }
+   Counts are keyed by item id, so renaming an item keeps its counts and location. */
+function invItems(){ return S.items.filter(i=>!i.retired).slice().sort(byName).map(i=>i.id); }
+function starterSite(){ return {locs:STARTER_LOCS.map(([id,name])=>({id,name,items:[]})), stock:{}}; }
+function invRead(c){ return (S.inv&&S.inv.c&&S.inv.c[c])||starterSite(); }
+function invW(c){ if(!S.inv||typeof S.inv!=='object') S.inv={c:{},log:[]}; S.inv.c=S.inv.c||{}; S.inv.log=S.inv.log||[];
+  if(!S.inv.c[c]) S.inv.c[c]=starterSite(); const r=S.inv.c[c]; r.locs=r.locs||[]; r.stock=r.stock||{}; return r; }
+function invBase(){ try{ const b=JSON.parse(SY.baseJSON); return (b&&b.inv)||{}; }catch(e){ return {}; } }
+function baseStock(base,c){ return (base.c&&base.c[c]&&base.c[c].stock)||{}; }
+function hasNum(v){ return v!==undefined&&v!==null&&v!==''&&isFinite(v); }
+function invLog(){ return (S.inv&&Array.isArray(S.inv.log))?S.inv.log:[]; }
+function lastInv(c){ const l=invLog().filter(e=>e.c===c); return l.length?l[l.length-1]:null; }
+function catPass(id){ if(PREF.cat==='all') return true; return catKey(ITEM.get(id))===PREF.cat; }
+/* which location each item sits in (first one wins), plus the items with no location.
+   filtered: apply the category filter to every section. */
+function invLayout(c,filtered){
+  const R=invRead(c), all=invItems(), have=new Set(all), placed=new Map();
+  const secs=R.locs.map(l=>{ const keys=(l.items||[]).filter(k=>have.has(k)&&!placed.has(k)); keys.forEach(k=>placed.set(k,l.id)); return {id:l.id,name:l.name,keys}; });
+  secs.push({id:'',name:'Not assigned to a location',keys:all.filter(k=>!placed.has(k)),un:true});
+  if(filtered) secs.forEach(s=>{ s.keys=s.keys.filter(catPass); });
+  return {R, all:filtered?all.filter(catPass):all, secs, placed};
+}
+function diffCount(cur,bs){ let ch=0; new Set(Object.keys(cur).concat(Object.keys(bs))).forEach(k=>{ if(String(cur[k]??'')!==String(bs[k]??'')) ch++; }); return ch; }
+function invCounts(c){ const R=invRead(c), all=invItems(); return {n:all.filter(k=>hasNum(R.stock[k])).length, of:all.length, ch:diffCount(R.stock,baseStock(invBase(),c))}; }
+/* log entries a push adds: every site whose counts changed, and on a push from the Inventory tab,
+   the site being counted even if nothing changed (a completed count with no changes). */
+function invLogEntries(out,invPush,who){
+  const base=invBase(), at=new Date().toISOString(), list=invItems(), res=[];
+  SITES.forEach(c=>{
+    const cur=(out.inv&&out.inv.c&&out.inv.c[c]&&out.inv.c[c].stock)||{}, ch=diffCount(cur,baseStock(base,c));
+    if(ch||(invPush&&c===PREF.site)) res.push({at,by:who||'',c,n:list.filter(k=>hasNum(cur[k])).length,of:list.length,ch});
+  });
+  return res;
+}
+function moveInvItem(c,k,to){ const R=invW(c); R.locs.forEach(l=>{ l.items=(l.items||[]).filter(x=>x!==k); }); const l=R.locs.find(x=>x.id===to); if(l) l.items.push(k); }
+
+/* ===================== status line ===================== */
+function status(msg,err,go){ const s=document.getElementById('status'); s.textContent=msg; s.className='status'+(err?' err':'');
+  if(go){ const b=document.createElement('button'); b.type='button'; b.className='linkbtn'; b.textContent=go[0]; b.onclick=go[1]; s.appendChild(b); } }
+const toIndex=['Open the Index', ()=>{ PREF.tab='index'; prefChanged(); }];
+
+/* ===================== view switch ===================== */
+function renderView(){
+  document.querySelectorAll('[data-tab]').forEach(b=>b.setAttribute('aria-selected',String(b.dataset.tab===PREF.tab)));
+  document.getElementById('topText').textContent=PREF.tab==='inv'?'Count what’s on hand at each camp, sorted by storage location.':'The list of supplies every site counts from. Add, rename, sort into categories, retire.';
+  if(PREF.tab==='index') renderIndex(); else renderInv();
+}
+function renderPanel(){ if(PREF.tab==='index') renderCatPanel(); else renderInvPanel(); }
+
+/* ===================== inventory tab ===================== */
+let invEdit=false, invQ='', locDelArm=null;
+function invOpt(R,sel){ return R.locs.map(l=>'<option value="'+esc(l.id)+'"'+(l.id===sel?' selected':'')+'>'+esc(l.name)+'</option>').join('')+'<option value=""'+(sel?'':' selected')+'>Not assigned</option>'; }
+function invRow(k,R,locId,bs){ const it=ITEM.get(k), v=R.stock[k], chg=String(v??'')!==String(bs[k]??'');
+  return '<tr data-key="'+esc(k)+'" data-name="'+esc(nameKey(it.name))+'"><td class="item">'+esc(it.name)+'<small>'+esc(catName(it))+'</small></td>'
+    +'<td class="oh'+(chg?' chg':'')+'"><input type="number" inputmode="decimal" min="0" step="any" data-oh value="'+(hasNum(v)?esc(v):'')+'" aria-label="On hand: '+esc(it.name)+'"></td>'
+    +'<td class="mv"><select data-mv aria-label="Storage location for '+esc(it.name)+'">'+invOpt(R,locId)+'</select></td></tr>'; }
+function catOptions(sel,withAll){
+  const hasNone=S.items.some(i=>catKey(i)==='_none');
+  return (withAll?'<option value="all"'+(sel==='all'?' selected':'')+'>All categories</option>':'')
+    +S.cats.map(c=>'<option value="'+esc(c.id)+'"'+(c.id===sel?' selected':'')+'>'+esc(c.name)+'</option>').join('')
+    +(hasNone||sel==='_none'||!withAll?'<option value="_none"'+(sel==='_none'?' selected':'')+'>Uncategorized</option>':'');
+}
+function renderInv(){
+  renderPanel();
+  const v=document.getElementById('view');
+  if(PREF.cat!=='all'&&PREF.cat!=='_none'&&!CAT.has(PREF.cat)) PREF.cat='all';
+  if(!S.items.length&&STORE&&!liveChecked){ v.innerHTML='<div class="card"><div class="empty">Loading the live index…</div></div>'; return; }
+  const c=PREF.site, L=invLayout(c,true), R=L.R, bs=baseStock(invBase(),c);
+  if(PREF.loc!=='all'&&PREF.loc!=='_un'&&!R.locs.some(l=>l.id===PREF.loc)) PREF.loc='all';
+  const cnt=keys=>keys.filter(k=>hasNum(R.stock[k])).length;
+  const chip=(id,label,keys,cls)=>'<button type="button" class="lchip'+(cls?' '+cls:'')+'" data-lf="'+esc(id)+'" aria-pressed="'+(PREF.loc===id)+'">'+esc(label)+'<small>'+cnt(keys)+'/'+keys.length+'</small></button>';
+  const un=L.secs[L.secs.length-1];
+  let h='<div class="invbar"><div class="seg siteseg" role="radiogroup" aria-label="Site">'
+    +SITES.map(x=>'<button type="button" role="radio" data-site="'+x+'" aria-checked="'+(x===c)+'">'+esc(SITE_SHORT[x])+'</button>').join('')+'</div>'
+    +'<input type="search" class="find" id="invq" placeholder="Find an item" value="'+esc(invQ)+'" aria-label="Find an item">'
+    +'<select id="invcat" aria-label="Category filter">'+catOptions(PREF.cat,true)+'</select></div>';
+  if(!invItems().length){
+    v.innerHTML=h+'<div class="card"><div class="empty">'+(liveErr&&!S.items.length?'Couldn’t load the live version, and this device has no saved copy yet. Check the connection and reload the page.':'Nothing to count yet! Add supplies on the <button type="button" class="linkbtn" data-goindex>Index</button> tab and they show up here.')+'</div></div>';
+    return;
+  }
+  h+='<div class="locbar"><div class="lochead"><span class="lbl">Storage locations · '+esc(SITE_NAME[c])+'</span><button type="button" class="btn small" id="locEdit" aria-expanded="'+invEdit+'">'+(invEdit?'Done editing':'Edit locations')+'</button></div>'
+    +'<div class="lchips">'+chip('all','All',L.all)+L.secs.filter(s=>!s.un).map(s=>chip(s.id,s.name,s.keys)).join('')+(un.keys.length?chip('_un','Not assigned',un.keys,'un'):'')+'</div>';
+  if(invEdit){
+    const full=invLayout(c,false);
+    h+='<div class="locedit">'+(R.locs.length?R.locs.map((l,i)=>{ const s=full.secs[i];
+        return '<div class="lerow" data-lid="'+esc(l.id)+'"><input type="text" data-lname value="'+esc(l.name)+'" aria-label="Location name" maxlength="40">'
+          +'<span class="n">'+plural(s.keys.length,'item')+'</span>'
+          +'<button class="x" type="button" data-lup'+(i===0?' disabled':'')+' aria-label="Move '+esc(l.name)+' up">'+ICON.up+'</button>'
+          +'<button class="x" type="button" data-ldown'+(i===R.locs.length-1?' disabled':'')+' aria-label="Move '+esc(l.name)+' down">'+ICON.down+'</button>'
+          +'<button class="x del'+(locDelArm===l.id?' armed':'')+'" type="button" data-ldel aria-label="Remove '+esc(l.name)+'">'+(locDelArm===l.id?'Remove?':ICON.x)+'</button></div>'; }).join(''):'<span class="hint">No storage locations yet.</span>')
+      +'<form class="leadd" id="locAdd"><input type="text" id="locName" placeholder="New location, e.g. Office closet" maxlength="40" aria-label="New location name"><button class="btn small primary" type="submit">Add location</button>'
+      +'<span class="hint">Removing a location keeps its items and counts; they move to Not assigned.</span></form></div>';
+  }
+  h+='</div><div class="invsecs">';
+  let shown=0;
+  L.secs.forEach(s=>{
+    if(PREF.loc!=='all'&&!(PREF.loc==='_un'?s.un:PREF.loc===s.id)) return;
+    if(s.un&&!s.keys.length) return;
+    shown++;
+    h+='<section class="card invloc'+(s.un?' un':'')+'" data-sec="'+esc(s.id)+'"><div class="thead"><h3>'+esc(s.name)+'</h3><span class="meta" data-prog>'+(s.keys.length?cnt(s.keys)+' of '+s.keys.length+' counted':'Empty')+'</span>'
+      +(!s.un&&s.keys.length>1?'<button class="btn small quiet" type="button" data-sort>Sort A–Z</button>':'')+'</div>';
+    h+=s.keys.length?'<table class="invtable"><thead><tr><th>Item</th><th class="oh">On hand</th><th class="mv">Location</th></tr></thead><tbody>'+s.keys.map(k=>invRow(k,R,s.id,bs)).join('')+'</tbody></table>'
+      :'<div class="empty">'+(PREF.cat!=='all'?'No '+esc(PREF.cat==='_none'?'uncategorized':CAT.get(PREF.cat).name)+' items here.':'No items here yet. Add them below, or move them from another location.')+'</div>';
+    if(!s.un) h+='<form class="addrow" data-add><input type="text" list="invList" placeholder="Add an item to '+esc(s.name)+'" aria-label="Add an item to '+esc(s.name)+'" autocomplete="off"><button class="btn small" type="submit">Add</button></form>';
+    h+='</section>';
+  });
+  if(!shown) h+='<div class="card"><div class="empty">No storage locations yet. Press Edit locations to add one.</div></div>';
+  h+='</div>';
+  v.innerHTML=h;
+  document.getElementById('invList').innerHTML=invItems().map(k=>'<option value="'+esc(itemName(k))+'"></option>').join('');
+  applyInvQuery();
+}
+function applyInvQuery(){
+  const q=nameKey(invQ);
+  document.querySelectorAll('#view .invloc').forEach(sec=>{ let vis=0, rows=0;
+    sec.querySelectorAll('tr[data-key]').forEach(tr=>{ rows++; const on=!q||tr.dataset.name.includes(q); tr.hidden=!on; if(on) vis++; });
+    sec.hidden=!!q&&!vis; });
+}
+function refreshInvBits(){
+  const c=PREF.site, L=invLayout(c,true), R=L.R, cnt=keys=>keys.filter(k=>hasNum(R.stock[k])).length;
+  document.querySelectorAll('#view .invloc').forEach(sec=>{ const s=L.secs.find(x=>x.id===sec.dataset.sec); const p=sec.querySelector('[data-prog]'); if(s&&p) p.textContent=s.keys.length?cnt(s.keys)+' of '+s.keys.length+' counted':'Empty'; });
+  document.querySelectorAll('#view [data-lf]').forEach(b=>{ const id=b.dataset.lf, keys=id==='all'?L.all:id==='_un'?L.secs[L.secs.length-1].keys:(L.secs.find(s=>s.id===id)||{keys:[]}).keys; const sm=b.querySelector('small'); if(sm) sm.textContent=cnt(keys)+'/'+keys.length; });
+  renderInvPanel();
+}
+function renderInvPanel(){
+  const el=document.getElementById('panel'), c=PREF.site, last=lastInv(c), k=invCounts(c);
+  const who=e=>esc(e.by||'Someone');
+  let h='<div class="grp"><span class="lbl">Inventory</span><div class="sitename '+c+'">'+esc(SITE_NAME[c])+'</div></div>';
+  h+=last?'<div class="lastinv"><span class="lbl">Last completed inventory</span><b>'+esc(fmtWhen(last.at))+'</b><span>by '+who(last)+' · '+last.n+' of '+last.of+' items counted</span></div>'
+    :'<div class="lastinv none"><span class="lbl">Last completed inventory</span><span>None logged yet for '+esc(SITE_NAME[c])+'.</span></div>';
+  h+='<div class="othersites">'+SITES.filter(x=>x!==c).map(x=>{ const l=lastInv(x); return '<span>'+esc(SITE_NAME[x])+': <b>'+(l?esc(fmtWhen(l.at)):'none yet')+'</b></span>'; }).join('')+'</div>';
+  h+='<div class="totals"><div class="tot"><b>'+k.n+'</b><span>of '+k.of+' counted</span></div><div class="tot'+(k.ch?' hot':'')+'"><b>'+k.ch+'</b><span>Not pushed yet</span></div></div>';
+  h+='<div class="howto"><b>How it works</b><br>Type what’s on hand for each item (Enter jumps to the next one). Leave a box blank if you didn’t count it; 0 means none on hand. Counts stay on this device until you press <b>Push live</b>, which saves them for everyone and logs this count with your name. Counts carry over until someone changes them.</div>';
+  const log=invLog().filter(e=>e.c===c).slice(-15).reverse();
+  h+='<div class="grp"><span class="lbl">Inventory log · '+esc(SITE_NAME[c])+'</span>'+(log.length?'<ol class="invlog">'+log.map(e=>'<li><span class="t">'+esc(fmtWhen(e.at))+'</span><span class="w">'+who(e)+'</span><span class="d">'+e.n+' of '+e.of+' counted · '+e.ch+' changed</span></li>').join('')+'</ol>':'<span class="hint">Nothing logged yet.</span>')+'</div>';
+  el.innerHTML=h;
+}
+function bindInv(){
+  const v=document.getElementById('view');
+  v.addEventListener('input',e=>{
+    if(PREF.tab!=='inv') return;
+    const el=e.target;
+    if(el.id==='invq'){ invQ=el.value; applyInvQuery(); return; }
+    if(el.hasAttribute('data-oh')){ const k=el.closest('tr').dataset.key, R=invW(PREF.site);
+      if(el.value===''||!isFinite(+el.value)) delete R.stock[k]; else R.stock[k]=Math.max(0,+el.value);
+      const bs=baseStock(invBase(),PREF.site); el.parentNode.classList.toggle('chg',String(R.stock[k]??'')!==String(bs[k]??''));
+      save(); refreshInvBits(); }
+  });
+  v.addEventListener('keydown',e=>{ if(PREF.tab!=='inv'||e.key!=='Enter'||!e.target.hasAttribute('data-oh')) return; e.preventDefault();
+    const all=[...v.querySelectorAll('[data-oh]')].filter(x=>!x.closest('tr').hidden&&!x.closest('section').hidden), i=all.indexOf(e.target); if(all[i+1]){ all[i+1].focus(); all[i+1].select(); } else e.target.blur(); });
+  v.addEventListener('change',e=>{
+    if(PREF.tab!=='inv') return;
+    const el=e.target;
+    if(el.id==='invcat'){ PREF.cat=el.value; savePref(); renderInv(); return; }
+    if(el.hasAttribute('data-mv')){ const k=el.closest('tr').dataset.key, R=invW(PREF.site); moveInvItem(PREF.site,k,el.value);
+      const l=R.locs.find(x=>x.id===el.value); save(); renderInv(); status('Moved '+itemName(k)+' to '+(l?l.name:'Not assigned')+'.'); return; }
+    if(el.hasAttribute('data-lname')){ const id=el.closest('[data-lid]').dataset.lid, R=invW(PREF.site), l=R.locs.find(x=>x.id===id), nv=normName(el.value);
+      if(!l) return; if(!nv){ el.value=l.name; status('A location needs a name. Use × to remove it.',true); return; }
+      if(R.locs.some(x=>x!==l&&nameKey(x.name)===nameKey(nv))){ el.value=l.name; status(nv+' is already a location.',true); return; }
+      l.name=nv; save(); renderInv(); }
+  });
+  v.addEventListener('click',e=>{
+    if(PREF.tab!=='inv') return;
+    const b=e.target.closest('button'); if(!b) return;
+    if(b.hasAttribute('data-goindex')){ PREF.tab='index'; prefChanged(); return; }
+    if(b.dataset.site){ PREF.site=b.dataset.site; PREF.loc='all'; invEdit=false; locDelArm=null; savePref(); setHash(); renderInv(); renderSync(); return; }
+    if(b.dataset.lf){ PREF.loc=b.dataset.lf; savePref(); renderInv(); return; }
+    if(b.id==='locEdit'){ invEdit=!invEdit; locDelArm=null; renderInv(); if(invEdit){ const n=document.getElementById('locName'); if(n) n.focus(); } return; }
+    const lrow=b.closest('[data-lid]');
+    if(lrow){ const R=invW(PREF.site), i=R.locs.findIndex(x=>x.id===lrow.dataset.lid); if(i<0) return;
+      if(b.hasAttribute('data-lup')&&i>0){ [R.locs[i-1],R.locs[i]]=[R.locs[i],R.locs[i-1]]; save(); renderInv(); }
+      else if(b.hasAttribute('data-ldown')&&i<R.locs.length-1){ [R.locs[i+1],R.locs[i]]=[R.locs[i],R.locs[i+1]]; save(); renderInv(); }
+      else if(b.hasAttribute('data-ldel')){ const l=R.locs[i];
+        if(locDelArm!==l.id){ locDelArm=l.id; renderInv(); setTimeout(()=>{ if(locDelArm===l.id){ locDelArm=null; if(PREF.tab==='inv') renderInv(); } },4000); return; }
+        locDelArm=null; R.locs.splice(i,1); if(PREF.loc===l.id) PREF.loc='all'; save(); renderInv(); status('Removed '+l.name+'. Its items are now under Not assigned, with their counts kept.'); }
+      return; }
+    if(b.hasAttribute('data-sort')){ const id=b.closest('[data-sec]').dataset.sec, l=invW(PREF.site).locs.find(x=>x.id===id);
+      if(l){ l.items.sort((a,c2)=>itemName(a).localeCompare(itemName(c2),undefined,{sensitivity:'base'})); save(); renderInv(); } }
+  });
+  v.addEventListener('submit',e=>{
+    if(PREF.tab!=='inv') return;
+    e.preventDefault(); const f=e.target;
+    if(f.id==='locAdd'){ const inp=document.getElementById('locName'), nv=normName(inp.value); if(!nv){ inp.focus(); return; }
+      const R=invW(PREF.site); if(R.locs.some(l=>nameKey(l.name)===nameKey(nv))){ status(nv+' is already a location.',true); return; }
+      R.locs.push({id:newId('l'),name:nv,items:[]}); save(); renderInv(); status('Added '+nv+'. Add items to it below.'); const n=document.getElementById('locName'); if(n) n.focus(); return; }
+    if(f.hasAttribute('data-add')){ const inp=f.querySelector('input'), typed=normName(inp.value), id=f.closest('[data-sec]').dataset.sec, c=PREF.site;
+      if(!typed) return; const it=findByName(typed);
+      if(!it){ status(typed+' isn’t in the index. Add it on the Index tab first.',true,toIndex); return; }
+      if(it.retired){ status(it.name+' is retired. Un-retire it on the Index tab to count it again.',true,toIndex); return; }
+      const L=invLayout(c,false), from=L.placed.get(it.id), R=invW(c), to=R.locs.find(l=>l.id===id), was=from&&R.locs.find(l=>l.id===from);
+      if(from===id){ status(it.name+' is already in '+to.name+'.'); inp.value=''; return; }
+      moveInvItem(c,it.id,id); save(); renderInv(); status((was?'Moved '+it.name+' from '+was.name+' to ':'Added '+it.name+' to ')+to.name+'.');
+      const again=document.querySelector('#view [data-sec="'+(window.CSS&&CSS.escape?CSS.escape(id):id)+'"] form[data-add] input'); if(again) again.focus(); }
+  });
+}
+
+/* ===================== index tab ===================== */
+let idxQ='', idxCat='all', delArm=null, catDelArm=null;
+function idxRow(it){ const n=esc(it.name);
+  return '<li class="irow'+(it.retired?' retired':'')+'" data-id="'+esc(it.id)+'">'
+    +'<input type="text" data-f="name" value="'+n+'" aria-label="Item name" maxlength="80">'
+    +'<select class="icat" data-f="cat" aria-label="Category for '+n+'">'+catOptions(catKey(it),false)+'</select>'
+    +'<label class="ret" title="Retired items drop off the inventory lists; their counts are kept"><input type="checkbox" data-f="retired"'+(it.retired?' checked':'')+'> Retired</label>'
+    +'<button class="x del'+(delArm===it.id?' armed':'')+'" type="button" data-del aria-label="Delete '+n+'">'+(delArm===it.id?'Delete?':ICON.x)+'</button></li>';
+}
+function idxRowsHtml(){
+  const q=nameKey(idxQ);
+  const list=S.items.filter(it=>(!q||nameKey(it.name).includes(q))&&(idxCat==='all'||catKey(it)===idxCat)).slice().sort(byName);
+  return list.length?list.map(idxRow).join(''):'<li class="empty">'+(S.items.length?'No items match.':'The index is empty. Add your first item above, or paste a list.')+'</li>';
+}
+function renderIndex(){
+  renderPanel();
+  if(idxCat!=='all'&&idxCat!=='_none'&&!CAT.has(idxCat)) idxCat='all';
+  const v=document.getElementById('view'), ret=S.items.filter(i=>i.retired).length;
+  v.innerHTML='<div class="card"><div class="thead"><h3>Index</h3><span class="meta">'+plural(S.items.length,'item')+(ret?' · '+ret+' retired':'')+'</span></div>'
+   +'<form class="newitem" id="newitem" novalidate><div class="nf">'
+   +'<label><span class="lbl">Item name</span><input type="text" id="ni_name" placeholder="e.g. Trash bags 55 gal" maxlength="80" autocomplete="off"></label>'
+   +'<label><span class="lbl">Category</span><select id="ni_cat">'+catOptions(idxCat==='all'?(S.cats[0]?S.cats[0].id:'_none'):idxCat,false)+'</select></label>'
+   +'<button class="btn primary" type="submit">Add to index</button></div><span class="nmsg" id="ni_msg" role="status"></span></form>'
+   +'<details class="import" id="imp"><summary>Paste a list</summary><div class="impbody">'
+   +'<span class="hint">One item per line. Start a line with a category and a comma (<b>Cleaning, Bleach 1 gal</b>) or a tab (pasted from a spreadsheet) to file it there; new category names are created. Names already in the index are skipped.</span>'
+   +'<textarea id="impText" aria-label="Items to import" placeholder="Cleaning, Trash bags 55 gal&#10;Office, Copy paper (ream)&#10;Kickballs"></textarea>'
+   +'<div class="improw"><label class="hint" for="impCat">Lines without a category go in</label><select id="impCat">'+catOptions(S.cats[0]?S.cats[0].id:'_none',false)+'</select>'
+   +'<button class="btn small primary" type="button" id="impGo">Add these</button></div></div></details>'
+   +'<div class="idxbar"><input type="search" id="idxq" placeholder="Search the index" value="'+esc(idxQ)+'" aria-label="Search the index"><select id="idxcat" aria-label="Category filter">'+catOptions(idxCat,true)+'</select></div>'
+   +'<ul class="ilist" id="idxBody">'+idxRowsHtml()+'</ul></div>';
+}
+function renderCatPanel(){
+  const el=document.getElementById('panel'), n={};
+  S.items.forEach(i=>{ const k=catKey(i); n[k]=(n[k]||0)+1; });
+  let h='<div class="grp"><h2>Categories</h2><span class="hint">Order here is the order in every category menu. Removing a category leaves its items as Uncategorized.</span></div><div class="catlist">';
+  h+=S.cats.length?S.cats.map((c,i)=>'<div class="crow" data-cid="'+esc(c.id)+'"><input type="text" data-cname value="'+esc(c.name)+'" maxlength="40" aria-label="Category name"><span class="n" title="Items">'+(n[c.id]||0)+'</span>'
+     +'<button class="x" type="button" data-cup'+(i===0?' disabled':'')+' aria-label="Move '+esc(c.name)+' up">'+ICON.up+'</button>'
+     +'<button class="x" type="button" data-cdown'+(i===S.cats.length-1?' disabled':'')+' aria-label="Move '+esc(c.name)+' down">'+ICON.down+'</button>'
+     +'<button class="x del'+(catDelArm===c.id?' armed':'')+'" type="button" data-cdel aria-label="Remove '+esc(c.name)+'">'+(catDelArm===c.id?'Remove?':ICON.x)+'</button></div>').join('')
+    :'<span class="hint">No categories yet.</span>';
+  if(n._none) h+='<div class="crow"><span class="hint" style="flex:1;padding:6px 8px">Uncategorized</span><span class="n">'+n._none+'</span><span style="width:104px"></span></div>';
+  h+='</div><form class="cadd" id="catAdd"><input type="text" id="catName" placeholder="New category" maxlength="40" aria-label="New category name"><button class="btn small primary" type="submit">Add</button></form>';
+  el.innerHTML=h;
+}
+function flash(row){ row.classList.add('saved'); setTimeout(()=>row.classList.remove('saved'),700); }
+function bindIndex(){
+  const v=document.getElementById('view'), p=document.getElementById('panel');
+  v.addEventListener('input',e=>{ if(PREF.tab!=='index') return;
+    if(e.target.id==='idxq'){ idxQ=e.target.value; document.getElementById('idxBody').innerHTML=idxRowsHtml(); } });
+  v.addEventListener('change',e=>{ if(PREF.tab!=='index') return;
+    const el=e.target;
+    if(el.id==='idxcat'){ idxCat=el.value; renderIndex(); return; }
+    const f=el.dataset.f, row=el.closest('[data-id]'); if(!f||!row) return;
+    const it=ITEM.get(row.dataset.id); if(!it) return;
+    if(f==='name'){ const nv=normName(el.value);
+      if(!nv){ el.value=it.name; status('An item needs a name. Use × to delete it instead.',true); return; }
+      const dup=findByName(nv,it.id); if(dup){ el.value=it.name; status(dup.name+' is already in the index.',true); return; }
+      it.name=nv; el.value=nv; }
+    else if(f==='cat'){ it.cat=el.value==='_none'?null:el.value; }
+    else if(f==='retired'){ it.retired=el.checked; row.classList.toggle('retired',el.checked); status(it.retired?it.name+' is retired. It’s off the inventory lists; its counts are kept.':it.name+' is back on the inventory lists.'); }
+    save(); flash(row); renderCatPanel();
+  });
+  v.addEventListener('click',e=>{ if(PREF.tab!=='index') return;
+    const b=e.target.closest('button'); if(!b) return;
+    if(b.hasAttribute('data-del')){ const row=b.closest('[data-id]'), id=row.dataset.id, it=ITEM.get(id); if(!it) return;
+      if(delArm!==id){ document.querySelectorAll('[data-del].armed').forEach(x=>{ x.classList.remove('armed'); x.innerHTML=ICON.x; });
+        delArm=id; b.classList.add('armed'); b.textContent='Delete?'; setTimeout(()=>{ if(delArm===id){ delArm=null; if(b.isConnected){ b.classList.remove('armed'); b.innerHTML=ICON.x; } } },4000); return; }
+      delArm=null; S.items=S.items.filter(x=>x.id!==id);
+      if(S.inv&&S.inv.c) SITES.forEach(c=>{ const R=S.inv.c[c]; if(!R) return; const used=(R.locs||[]).some(l=>(l.items||[]).includes(id))||(R.stock&&id in R.stock);
+        if(used){ (R.locs||[]).forEach(l=>{ l.items=(l.items||[]).filter(x=>x!==id); }); if(R.stock) delete R.stock[id]; } });
+      reindex(); save(); renderIndex(); status('Deleted '+it.name+' and its counts. To keep its counts but hide it, use Retired instead.'); return; }
+    if(b.id==='impGo'){ doImport(); return; }
+  });
+  v.addEventListener('submit',e=>{ if(PREF.tab!=='index') return;
+    e.preventDefault(); if(e.target.id!=='newitem') return;
+    const msg=document.getElementById('ni_msg'), inp=document.getElementById('ni_name'), name=normName(inp.value), cat=document.getElementById('ni_cat').value;
+    if(!name){ msg.textContent='Enter an item name.'; msg.className='nmsg err'; inp.focus(); return; }
+    const dup=findByName(name); if(dup){ msg.textContent=dup.name+' is already in the index. Give it a different name.'; msg.className='nmsg err'; inp.focus(); return; }
+    S.items.push({id:newId('i'),name,cat:cat==='_none'?null:cat,retired:false}); reindex(); save(); idxQ=''; renderIndex();
+    const m2=document.getElementById('ni_msg'); m2.textContent='Added '+name+'. It shows up under Not assigned at each site until you place it.'; m2.className='nmsg';
+    const c2=document.getElementById('ni_cat'); if(c2) c2.value=cat; document.getElementById('ni_name').focus();
+  });
+  /* categories, in the side panel */
+  p.addEventListener('change',e=>{ if(PREF.tab!=='index'||!e.target.hasAttribute('data-cname')) return;
+    const el=e.target, c=CAT.get(el.closest('[data-cid]').dataset.cid), nv=normName(el.value); if(!c) return;
+    if(!nv){ el.value=c.name; status('A category needs a name. Use × to remove it.',true); return; }
+    if(S.cats.some(x=>x!==c&&nameKey(x.name)===nameKey(nv))){ el.value=c.name; status(nv+' is already a category.',true); return; }
+    c.name=nv; save(); renderIndex(); });
+  p.addEventListener('click',e=>{ if(PREF.tab!=='index') return;
+    const b=e.target.closest('button'), row=b&&b.closest('[data-cid]'); if(!row) return;
+    const i=S.cats.findIndex(x=>x.id===row.dataset.cid); if(i<0) return; const c=S.cats[i];
+    if(b.hasAttribute('data-cup')&&i>0){ [S.cats[i-1],S.cats[i]]=[S.cats[i],S.cats[i-1]]; save(); renderIndex(); }
+    else if(b.hasAttribute('data-cdown')&&i<S.cats.length-1){ [S.cats[i+1],S.cats[i]]=[S.cats[i],S.cats[i+1]]; save(); renderIndex(); }
+    else if(b.hasAttribute('data-cdel')){
+      if(catDelArm!==c.id){ catDelArm=c.id; renderCatPanel(); setTimeout(()=>{ if(catDelArm===c.id){ catDelArm=null; if(PREF.tab==='index') renderCatPanel(); } },4000); return; }
+      catDelArm=null; let n=0; S.items.forEach(it=>{ if(it.cat===c.id){ it.cat=null; n++; } }); S.cats.splice(i,1);
+      if(PREF.cat===c.id) PREF.cat='all'; reindex(); save(); renderIndex(); status('Removed '+c.name+'.'+(n?' '+plural(n,'item')+' are now Uncategorized.':'')); }
+  });
+  p.addEventListener('submit',e=>{ if(PREF.tab!=='index'||e.target.id!=='catAdd') return; e.preventDefault();
+    const inp=document.getElementById('catName'), nv=normName(inp.value); if(!nv){ inp.focus(); return; }
+    if(S.cats.some(x=>nameKey(x.name)===nameKey(nv))){ status(nv+' is already a category.',true); return; }
+    S.cats.push({id:newId('c'),name:nv}); reindex(); save(); renderIndex(); status('Added the '+nv+' category.'); const n=document.getElementById('catName'); if(n) n.focus(); });
+}
+function doImport(){
+  const ta=document.getElementById('impText'), def=document.getElementById('impCat').value;
+  let added=0, dup=0, newCats=0;
+  ta.value.split(/\r?\n/).forEach(line=>{
+    line=line.trim(); if(!line) return;
+    let cat=null, name=line;
+    if(line.includes('\t')){ const p=line.split('\t').map(normName).filter(Boolean); if(p.length>1){ cat=p[0]; name=p[1]; } else name=p[0]||''; }
+    else { const i=line.indexOf(','); if(i>0){ cat=line.slice(0,i); name=line.slice(i+1); } }
+    name=normName(name); cat=cat==null?null:normName(cat);
+    if(!name||(cat&&nameKey(cat)==='category'&&nameKey(name)==='item')) return;
+    let cid=def==='_none'?null:def;
+    if(cat){ let c=S.cats.find(x=>nameKey(x.name)===nameKey(cat)); if(!c){ c={id:newId('c'),name:cat}; S.cats.push(c); newCats++; } cid=c.id; }
+    if(findByName(name)){ dup++; return; }
+    S.items.push({id:newId('i'),name,cat:cid,retired:false}); added++;
+  });
+  if(!added&&!newCats){ status(dup?'Nothing added: every name is already in the index.':'Paste some items first, one per line.',!added); return; }
+  reindex(); save(); idxQ=''; renderIndex();
+  status('Added '+plural(added,'item')+(newCats?' and '+plural(newCats,'new category').replace('categorys','categories'):'')+'.'+(dup?' Skipped '+dup+' already in the index.':''));
+}
+
+/* ===================== merging a newer live version with unpublished changes =====================
+   When the two sets of changes touch different parts (categories, items, each site's inventory),
+   combine them. The inventory log keeps every entry from both sides. */
+function normShared(st){ const o=Object.assign(defaults(),JSON.parse(JSON.stringify(st||{}))); return sharedOf(o); }
+function pick3(b,m,l){ const sb=stable(b), sm=stable(m), sl=stable(l); if(sm===sb||sm===sl) return {v:l,from:'live'}; if(sl===sb) return {v:m,from:'mine'}; return null; }
+function mergeLogs(a,b){ const seen=new Set(), out=[]; (a||[]).concat(b||[]).forEach(e=>{ const id=e.at+'|'+e.by+'|'+e.c; if(!seen.has(id)){ seen.add(id); out.push(e); } });
+  return out.sort((x,y)=>String(x.at).localeCompare(String(y.at))).slice(-LOG_MAX); }
+function mergeShared(base,mine,live){
+  const out={}, fromLive=[];
+  for(const k of SHARED){ if(k==='inv') continue; const p=pick3(base[k],mine[k],live[k]); if(!p) return null; out[k]=p.v; if(p.from==='live'&&stable(p.v)!==stable(mine[k])) fromLive.push(k); }
+  const bi=base.inv||{}, mi=mine.inv||{}, li=live.inv||{};
+  if(mine.inv!==undefined||live.inv!==undefined){ const c={};
+    for(const cc of SITES){ const b=(bi.c||{})[cc], m=(mi.c||{})[cc], l=(li.c||{})[cc], p=pick3(b,m,l); if(!p) return null; if(p.v!=null) c[cc]=p.v; if(p.from==='live'&&stable(p.v)!==stable(m)) fromLive.push('inv.'+cc); }
+    out.inv={c, log:mergeLogs(li.log,mi.log)};
+    if(stable(out.inv.log)!==stable(mi.log||[])) fromLive.push('inv.log'); }
+  return {state:out, fromLive};
+}
+function rebaseOnto(doc){
+  if(!doc||!doc.state) return false;
+  let base; try{ base=JSON.parse(SY.baseJSON); }catch(e){ return false; }
+  const live=normShared(doc.state), m=mergeShared(base,sharedOf(S),live); if(!m) return false;
+  SHARED.forEach(k=>{ if(m.state[k]!==undefined) S[k]=JSON.parse(JSON.stringify(m.state[k])); else if(OPTIONAL.includes(k)) delete S[k]; });
+  SY.baseV=doc.v; SY.baseJSON=stable(live); LIVE=doc; conflict=null;
+  reindex();
+  /* redraw only if something on screen came from the other person, so nobody loses their place while typing */
+  const vis=m.fromLive.some(k=>k==='items'||k==='cats'||(PREF.tab==='inv'&&k==='inv.'+PREF.site));
+  if(vis) renderView(); else renderPanel();
+  save();
+  return true;
+}
+
+/* ===================== links: #inventory.<site>, #index ===================== */
+function hashTokens(){ return PREF.tab==='index'?'index':'inventory.'+SITE_TOK[PREF.site]; }
+function shareURL(){ return location.origin+location.pathname+'#'+hashTokens(); }
+function readHash(){
+  const raw=(location.hash||'').replace(/^#/,'').toLowerCase(); if(!raw) return false;
+  const toks=raw.split(/[.,_~\/-]+/).filter(Boolean); if(!toks.length) return false;
+  const SITE_OF={ridge:'RIDGE',springs:'SPRINGS',sm:'SM',southmountain:'SM',mountain:'SM'};
+  let hit=false, site=null;
+  toks.forEach(x=>{ if(SITE_OF[x]){ site=SITE_OF[x]; hit=true; } else if(x==='inventory'||x==='inv'||x==='index') hit=true; });
+  if(!hit) return false;
+  if(site) PREF.site=site;
+  PREF.tab=toks.includes('index')?'index':'inv'; PREF.loc='all';
+  return true;
+}
+function setHash(){ const h='#'+hashTokens(); try{ if(location.hash!==h) history.replaceState(null,'',h); }catch(e){} }
+function prefChanged(){ invEdit=false; locDelArm=null; savePref(); setHash(); renderView(); renderSync(); window.scrollTo(0,0); }
+document.querySelectorAll('[data-tab]').forEach(b=>b.onclick=()=>{ if(PREF.tab===b.dataset.tab) return; PREF.tab=b.dataset.tab; prefChanged(); });
+document.getElementById('copyLink').onclick=async()=>{ const u=shareURL();
+  try{ await navigator.clipboard.writeText(u); status('Link copied: '+u); }catch(e){ status('Copy this link: '+u); } };
+window.addEventListener('hashchange',()=>{ if(readHash()){ savePref(); renderView(); renderSync(); } });
+
+/* ===================== live sync ===================== */
+function applyLive(doc,msg){
+  const st=JSON.parse(JSON.stringify(doc.state||{})), d=defaults();
+  SHARED.forEach(k=>{ if(st[k]!==undefined) S[k]=st[k]; else if(OPTIONAL.includes(k)) delete S[k]; else S[k]=d[k]; });
+  reindex(); SY.baseV=doc.v; SY.baseJSON=sharedJSON(); conflict=null; LIVE=doc;
+  renderView(); save();
+  if(msg) status(msg);
+}
+function onLive(doc){
+  liveChecked=true; LIVE=doc&&doc.v?doc:null;
+  if(LIVE){
+    if(LIVE.v===SY.baseV){ if(!isDirty()) conflict=null; }
+    else if(!isDirty()) applyLive(LIVE, SY.baseV?'Updated to the newest live version.':'');
+    else if(!rebaseOnto(LIVE)) conflict=LIVE;
+  }
+  renderSync();
+}
+/* named: the name form was just confirmed. retried: second try after merging in a newer version. */
+async function pushLive(force,named,retried){
+  if(!STORE||pushing) return;
+  const invPush=PREF.tab==='inv';
+  if(!isDirty()&&!force&&LIVE&&!invPush){ status('Nothing new to push. This is already the live version.'); return; }
+  /* devices are shared, so confirm who is pushing every time */
+  if(!named){ renderSync('name'); const n=document.getElementById('byIn'); if(n){ n.focus(); n.select(); } return; }
+  if(!PREF.by){ renderSync('name'); status('Add your name or initials so the log shows who did this.',true); return; }
+  pushing=true; renderSync();
+  try{
+    const out=JSON.parse(JSON.stringify(sharedOf(S)));
+    const entries=invLogEntries(out,invPush,PREF.by);
+    if(entries.length){ out.inv=out.inv||{c:{},log:[]}; out.inv.c=out.inv.c||{}; out.inv.log=(out.inv.log||[]).concat(entries).slice(-LOG_MAX); }
+    const res=await STORE.push(out, SY.baseV, !!force);
+    if(res.conflict&&!retried&&!force&&res.live&&rebaseOnto(res.live)){ pushing=false; return pushLive(force,true,true); }
+    if(res.conflict){ conflict=res.live||LIVE; if(res.live&&res.live.v) LIVE=res.live; status('Someone pushed a newer version while you were working, and you both changed the same thing.',true); }
+    else {
+      if(entries.length){ if(!S.inv) S.inv={c:{},log:[]}; S.inv.c=S.inv.c||{}; S.inv.log=out.inv.log; }
+      SY.baseV=res.v; SY.baseJSON=sharedJSON(); LIVE={v:res.v,at:res.at,by:res.by,state:JSON.parse(JSON.stringify(sharedOf(S)))}; conflict=null; save(); if(histOpen) loadHistory();
+      renderView();
+      const logged=entries.map(e=>SITE_NAME[e.c]);
+      status((logged.length?'Inventory logged for '+logged.join(', ')+'. ':'')+'Pushed live. Everyone now sees version '+res.v+'.'+(retried?' A newer version from someone else was merged in first; nothing of theirs was lost.':'')); }
+  }catch(e){
+    const code=e&&e.code;
+    if(code==='busy'||code==='rate_limited') status('Too many pushes in a row. Wait a minute and push again.',true);
+    else status('Could not push live ('+(code||'network error')+'). Your changes are still saved on this device.',true);
+  }
+  pushing=false; renderSync();
+}
+function discard(){ if(LIVE&&LIVE.state) applyLive(LIVE,'Discarded your changes. Showing the live version.'); else if(STORE) STORE.fetchNow().then(d=>{ if(d&&d.v) applyLive(d,'Discarded your changes. Showing the live version.'); }); }
+function loadDraft(p,label){
+  const keepLog=invLog().slice(), d=defaults();
+  SHARED.forEach(k=>{ if(p.state[k]!==undefined) S[k]=JSON.parse(JSON.stringify(p.state[k])); else if(OPTIONAL.includes(k)) delete S[k]; else S[k]=d[k]; });
+  /* rolling back counts never erases the record of who did inventory */
+  if(keepLog.length){ if(!S.inv) S.inv={c:{},log:[]}; S.inv.log=mergeLogs(S.inv.log,keepLog); }
+  reindex(); renderView(); save();
+  status('Loaded '+label+' as your draft. Check it, then Push live to make it the live version again.');
+}
+let armDiscard=false, armForce=false, syncMode=null;
+function renderSync(mode){
+  if(mode) syncMode=mode; if(pushing) syncMode=null;
+  const typed=document.getElementById('byIn'), typedVal=typed?typed.value:null, typedFocus=typed&&document.activeElement===typed;
+  const bar=document.getElementById('syncbar'), tx=document.getElementById('syncText'), act=document.getElementById('syncAct');
+  const dirty=isDirty(), inv=PREF.tab==='inv', site=esc(SITE_NAME[PREF.site]); let state, text='', btns='';
+  const pushBtn='<button class="btn small primary" type="button" data-sa="push">Push live</button>';
+  if(!STORE){ state='local'; text=REMOTE_URL.indexOf('__')===0?'Preview mode: not connected to a save relay yet. Changes save on this device only.':'Can’t reach the live version. Changes save on this device only.'; }
+  else if(!liveChecked){ state='loading'; text='Loading the live version…'; }
+  else if(pushing){ state='busy'; text='Pushing live…'; }
+  else if(conflict){ state='warn';
+    text='A newer live version (v'+conflict.v+(conflict.by?' by '+esc(conflict.by):'')+(conflict.at?', '+fmtWhen(conflict.at):'')+') was pushed while you had unpushed changes to the same thing.';
+    btns='<button class="btn small" type="button" data-sa="load">Load the live version</button><button class="btn small primary" type="button" data-sa="force">'+(armForce?'Click again to replace it':'Push mine anyway')+'</button>'; }
+  else if(liveErr&&!LIVE){ state='warn'; text='Couldn’t reach the live version. Your changes are saved on this device; push live once you’re back online.'; btns=dirty?pushBtn:''; }
+  else if(dirty){ state='dirty';
+    text=inv?'You have counts or changes that aren’t saved yet. Push live to save them and log this inventory for '+site+'.':'You have index changes only you can see. Push live to share them.';
+    btns=pushBtn+(LIVE?'<button class="btn small quiet" type="button" data-sa="discard">'+(armDiscard?'Click again to discard':'Discard changes')+'</button>':''); }
+  else if(LIVE){ state='live';
+    text='Live version '+LIVE.v+(LIVE.by?' · pushed by '+esc(LIVE.by):'')+(LIVE.at?' · '+fmtWhen(LIVE.at):'')+'. Everyone sees this.'+(inv?' Nothing changed? Push live anyway to log a completed inventory for '+site+'.':'');
+    if(inv) btns=pushBtn; }
+  else { state='empty'; text='Nothing has been pushed live yet. Push live to share this version with everyone.'; btns=pushBtn; }
+  if(STORE&&LIVE&&!pushing) btns+='<button class="btn small quiet" type="button" data-sa="hist" aria-expanded="'+histOpen+'">Version history</button>';
+  if(syncMode==='name'){
+    btns='<form class="pinf" id="namef"><label for="byIn">'+(inv?'Who did this inventory?':'Who’s pushing?')+'</label><input type="text" id="byIn" value="'+esc(PREF.by)+'" autocomplete="off" maxlength="30" required placeholder="Name or initials">'
+      +'<button class="btn small primary" type="submit">'+(inv?'Push live &amp; log':'Push live')+'</button><button class="btn small quiet" type="button" id="nameCancel">Cancel</button>'
+      +'<span class="hint">First name or initials only. This page is public.</span></form>';
+  }
+  bar.dataset.state=state; tx.innerHTML=text; act.innerHTML=btns;
+  const bi=document.getElementById('byIn'); if(bi&&typedVal!==null){ bi.value=typedVal; if(typedFocus) bi.focus(); }
+  act.querySelectorAll('[data-sa]').forEach(b=>{ const a=b.dataset.sa;
+    b.onclick=()=>{
+      if(a==='push') pushLive(false);
+      else if(a==='load') applyLive(conflict,'Loaded the live version. Your unpushed changes were discarded.');
+      else if(a==='force'){ if(!armForce){ armForce=true; renderSync(); setTimeout(()=>{ armForce=false; renderSync(); },4000); return; } armForce=false; syncMode='name'; renderSync(); forceNext=true; const n=document.getElementById('byIn'); if(n) n.focus(); }
+      else if(a==='discard'){ if(!armDiscard){ armDiscard=true; renderSync(); setTimeout(()=>{ armDiscard=false; renderSync(); },4000); return; } armDiscard=false; discard(); }
+      else if(a==='hist'){ histOpen=!histOpen; renderHistory(); if(histOpen) loadHistory(); renderSync(); }
+    };
+  });
+  const nf=document.getElementById('namef');
+  if(nf){ nf.onsubmit=e=>{ e.preventDefault(); const nv=normName(document.getElementById('byIn').value);
+      if(!nv){ status('Add your name or initials so the log shows who did this.',true); document.getElementById('byIn').focus(); return; }
+      syncMode=null; PREF.by=nv; savePref(); const f=forceNext; forceNext=false; pushLive(f,true); };
+    document.getElementById('nameCancel').onclick=()=>{ syncMode=null; forceNext=false; renderSync(); }; }
+}
+let forceNext=false;   /* a forced push ("Push mine anyway") still asks who is pushing */
+
+/* ===================== version history ===================== */
+let histOpen=false, histList=null, histErr='';
+async function loadHistory(){
+  histList=null; histErr=''; renderHistory();
+  try{ histList=await STORE.history(); }catch(e){ histErr='Could not load the history ('+(e&&e.code||'network error')+').'; }
+  renderHistory();
+}
+function renderHistory(){
+  const el=document.getElementById('histPanel'); el.hidden=!histOpen; if(!histOpen) return;
+  let rows;
+  if(histErr) rows='<p class="empty">'+esc(histErr)+'</p>';
+  else if(!histList) rows='<p class="empty">Loading versions…</p>';
+  else if(!histList.length) rows='<p class="empty">No versions yet.</p>';
+  else rows='<ol class="hlist">'+histList.map((h,i)=>'<li><span class="hv">v'+(h.v??'?')+'</span><span class="hw">'+esc(h.by||'Someone')+'</span><span class="ht">'+esc(fmtWhen(h.at))+'</span>'
+      +(i===0?'<span class="hcur">Live now</span>':'<button class="btn small" type="button" data-hv="'+esc(h.sha)+'">Load as draft</button>')+'</li>').join('')+'</ol>';
+  el.innerHTML='<div class="hhead"><h2>Version history</h2><span class="hint">Every push is saved. Load an older one, check it, then Push live to restore it. The inventory log is always kept.</span><button class="x" type="button" id="histClose" aria-label="Close version history">'+ICON.x+'</button></div>'+rows;
+  document.getElementById('histClose').onclick=()=>{ histOpen=false; renderHistory(); renderSync(); };
+  el.querySelectorAll('[data-hv]').forEach(b=>b.onclick=async()=>{ b.disabled=true; b.textContent='Loading…';
+    try{ const d=await STORE.version(b.dataset.hv); if(!d||!d.state) throw {code:'empty'}; loadDraft(d,'version '+d.v); histOpen=false; renderHistory(); renderSync(); }
+    catch(e){ b.disabled=false; b.textContent='Load as draft'; status('Could not load that version ('+(e&&e.code||'network error')+').',true); } });
+}
+
+/* ===================== the save relay ===================== */
+function remoteStore(){
+  const base=REMOTE_URL.replace(/\/+$/,'');
+  const get=async(p)=>{ const r=await fetch(base+p+(p.includes('?')?'&':'?')+'t='+Date.now(),{cache:'no-store'}); const d=await r.json().catch(()=>({})); if(!r.ok) throw {code:d.error||'http_'+r.status}; return d; };
+  const st={kind:'remote',
+    fetchNow:async()=>{ const d=await get('/live'); return d&&d.v?d:null; },
+    history:async()=>{ const d=await get('/history'); return d.versions||[]; },
+    version:async(sha)=>get('/version?sha='+encodeURIComponent(sha)),
+    push:async(state,baseV,force)=>{
+      const r=await fetch(base+'/live',{method:'POST',headers:{'Content-Type':'text/plain'},body:JSON.stringify({by:PREF.by,base:baseV,force,state})});
+      const d=await r.json().catch(()=>({}));
+      if(d.error==='conflict') return {conflict:true, live:d.live};
+      if(!r.ok||d.error) throw {code:d.error||'http_'+r.status};
+      return {v:d.v, at:d.at, by:d.by}; }};
+  const poll=async()=>{ if(document.hidden||pushing) return;
+    try{ const d=await get('/live'); const first=!liveChecked||liveErr; liveErr=false; onLive(d&&d.v?d:null); if(first) renderView(); }
+    catch(e){ const first=!liveChecked; liveErr=true; liveChecked=true; renderSync(); if(first) renderView(); } };
+  st.poll=poll;
+  poll(); setInterval(poll,POLL_MS); document.addEventListener('visibilitychange',()=>{ if(!document.hidden) poll(); });
+  window.addEventListener('focus',poll);
+  return st;
+}
+function connect(){
+  try{ if(REMOTE_URL&&REMOTE_URL.indexOf('__')!==0) STORE=remoteStore(); }catch(e){ STORE=null; }
+  if(!STORE){ liveChecked=true; renderView(); }
+  renderSync();
+}
+
+/* ===================== start ===================== */
+reindex();
+if(readHash()) savePref();
+bindInv(); bindIndex();
+renderView(); setHash(); renderSync();
+connect();
+})();
+</script>
+</body>
+</html>
