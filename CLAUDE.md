@@ -24,7 +24,7 @@ Crowders Camps' supply inventory tool (non-food). Ported from the Inventory mode
 - Look follows the Crowders Camps Design System, light and dark, phone width.
 
 ## Settings in the page
-Constants at the top of the script: `SITES`, `SITE_NAME`, `STARTER_LOCS` (one location, Main storage), `STARTER_CATS` (used only until the first push), `REMOTE_URL` (the Worker address; while it is the `__RELAY_URL__` placeholder the page runs in preview mode, saving on the device only).
+Constants at the top of the script: `SITES`, `SITE_NAME`, `STARTER_LOCS` (one location, Main storage), `STARTER_CATS` (used only until the first push), `REMOTE_URL` (the Worker address, `https://inventory.nate-5ff.workers.dev`; set it to `__RELAY_URL__` to run in preview mode, saving on the device only).
 
 ## Testing
 `npm install` then `npm test` (or `node tests/run.js --shots` for screenshots in `tests/shots/`). `tests/run.js` serves the page from a fake address, swaps `REMOTE_URL` for a fake relay (`tests/fake-relay.js`) seeded with `data/sample-live.json`, and runs 20 checks: counting, Enter-to-next, locations, moving items, Push live & log, empty push still logs, merge, conflict, discard, version history, index, categories, import, links, phone width, dark mode. It never pushes to the real live version. Set `PAGE=index.html` to test the live file instead of `preview/`.
