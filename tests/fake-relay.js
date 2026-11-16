@@ -21,6 +21,12 @@ function fakeRelay(page, relayUrl, seed) {
     const req = route.request();
     const url = new URL(req.url());
     const send = (obj, status = 200) => route.fulfill({ status, contentType: 'application/json', body: JSON.stringify(obj) });
+    // Save key mode (relay.key set): like the real relay once SAVE_KEY is on.
+    if (relay.key) {
+      const given = req.headers()['x-save-key'] || '';
+      if (!given) return send({ error: 'key_needed' }, 401);
+      if (given !== relay.key) return send({ error: 'key_wrong' }, 401);
+    }
 
     if (req.method() === 'GET' && url.pathname === '/live') return send(relay.doc);
     if (req.method() === 'GET' && url.pathname === '/history') {

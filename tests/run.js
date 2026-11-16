@@ -52,6 +52,25 @@ async function test(name, fn) {
 (async () => {
   browser = await chromium.launch();
 
+  await test('save key: asks once, remembers it, sends it on every call', async () => {
+    const ctx = await browser.newContext({ viewport: { width: 1280, height: 900 } });
+    const page = await ctx.newPage();
+    page.on('pageerror', e => { page._errors = (page._errors || []).concat(String(e)); });
+    await page.route(SITE + '**', r => r.fulfill({ status: 200, contentType: 'text/html', body: html }));
+    const relay = await fakeRelay(page, RELAY, SEED);
+    relay.key = 'test-key-1';
+    let asked = 0;
+    page.on('dialog', d => { asked++; d.accept('test-key-1'); });
+    await page.goto(SITE + '#inventory.ridge');
+    await page.waitForSelector('#syncbar[data-state="live"]');
+    ok(asked === 1, 'asked for the key once on load, got ' + asked);
+    await box(page, 'Trash bags 55 gal').fill('9');
+    await push(page);
+    ok(asked === 1, 'not asked again after it was saved');
+    ok(relay.doc.state.inv.c.RIDGE.stock, 'push went through with the key');
+    return { ctx, page, relay };
+  });
+
   await test('loads the live version and shows Ridge by location', async () => {
     const env = await open(); const { page } = env;
     await eq(page.locator('.sitename').textContent(), 'Ridge', 'site name');
